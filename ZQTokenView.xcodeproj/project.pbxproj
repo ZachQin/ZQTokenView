@@ -20,7 +20,6 @@
 		873285601D70836A000CBDEA /* explode_5@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 8732854F1D70836A000CBDEA /* explode_5@2x.png */; };
 		873285611D70836A000CBDEA /* explode_6@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 873285501D70836A000CBDEA /* explode_6@2x.png */; };
 		873285621D70836A000CBDEA /* UICollectionViewLeftAlignedLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 873285521D70836A000CBDEA /* UICollectionViewLeftAlignedLayout.m */; };
-		873285631D70836A000CBDEA /* UIView+Explode.m in Sources */ = {isa = PBXBuildFile; fileRef = 873285541D70836A000CBDEA /* UIView+Explode.m */; };
 		873285641D70836A000CBDEA /* ZQCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 873285561D70836A000CBDEA /* ZQCollectionViewCell.m */; };
 		873285651D70836A000CBDEA /* ZQReadyToDeleteView.m in Sources */ = {isa = PBXBuildFile; fileRef = 873285581D70836A000CBDEA /* ZQReadyToDeleteView.m */; };
 		873285661D70836A000CBDEA /* ZQTokenView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8732855A1D70836A000CBDEA /* ZQTokenView.m */; };
@@ -46,8 +45,6 @@
 		873285501D70836A000CBDEA /* explode_6@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "explode_6@2x.png"; sourceTree = "<group>"; };
 		873285511D70836A000CBDEA /* UICollectionViewLeftAlignedLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UICollectionViewLeftAlignedLayout.h; sourceTree = "<group>"; };
 		873285521D70836A000CBDEA /* UICollectionViewLeftAlignedLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UICollectionViewLeftAlignedLayout.m; sourceTree = "<group>"; };
-		873285531D70836A000CBDEA /* UIView+Explode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Explode.h"; sourceTree = "<group>"; };
-		873285541D70836A000CBDEA /* UIView+Explode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Explode.m"; sourceTree = "<group>"; };
 		873285551D70836A000CBDEA /* ZQCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZQCollectionViewCell.h; sourceTree = "<group>"; };
 		873285561D70836A000CBDEA /* ZQCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZQCollectionViewCell.m; sourceTree = "<group>"; };
 		873285571D70836A000CBDEA /* ZQReadyToDeleteView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZQReadyToDeleteView.h; sourceTree = "<group>"; };
@@ -115,8 +112,6 @@
 				873285491D70836A000CBDEA /* Explode */,
 				873285511D70836A000CBDEA /* UICollectionViewLeftAlignedLayout.h */,
 				873285521D70836A000CBDEA /* UICollectionViewLeftAlignedLayout.m */,
-				873285531D70836A000CBDEA /* UIView+Explode.h */,
-				873285541D70836A000CBDEA /* UIView+Explode.m */,
 				873285551D70836A000CBDEA /* ZQCollectionViewCell.h */,
 				873285561D70836A000CBDEA /* ZQCollectionViewCell.m */,
 				873285571D70836A000CBDEA /* ZQReadyToDeleteView.h */,
@@ -223,7 +218,6 @@
 				873285391D708314000CBDEA /* ViewController.m in Sources */,
 				873285361D708314000CBDEA /* AppDelegate.m in Sources */,
 				873285651D70836A000CBDEA /* ZQReadyToDeleteView.m in Sources */,
-				873285631D70836A000CBDEA /* UIView+Explode.m in Sources */,
 				873285331D708314000CBDEA /* main.m in Sources */,
 				873285661D70836A000CBDEA /* ZQTokenView.m in Sources */,
 			);
@@ -368,6 +362,7 @@
 				873285471D708314000CBDEA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
