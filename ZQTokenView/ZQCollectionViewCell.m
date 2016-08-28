@@ -8,6 +8,10 @@
 
 #import "ZQCollectionViewCell.h"
 
+@interface ZQCollectionViewCell ()
+@property (strong, nonatomic) UILabel *token;
+@end
+
 @implementation ZQCollectionViewCell
 
 #pragma mark - **************** init

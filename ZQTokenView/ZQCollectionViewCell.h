@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface ZQCollectionViewCell : UICollectionViewCell
-@property (strong, nonatomic) UILabel *token;
+@property (readonly, nonatomic) UILabel *token;
 + (UIColor *)blueTintColor;
 + (UIColor *)redTintColor;
 + (UIColor *)greenTintColor;
