@@ -76,9 +76,6 @@
     [self.collectionView addConstraint:[NSLayoutConstraint constraintWithItem:self.tokenPlaceHolderLabel attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationGreaterThanOrEqual toItem:self.collectionView attribute:NSLayoutAttributeRight multiplier:1 constant:20]];
     self.tokenPlaceHolderLabel.font = [UIFont systemFontOfSize:20];
     self.tokenPlaceHolderLabel.textColor = [UIColor grayColor];
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self.tokenPlaceHolderLabel sizeToFit];
-    });
     
     // ------setup Data
     self.minimumTokenHorizontalSpacing = 5;
