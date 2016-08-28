@@ -10,11 +10,13 @@
 #import "ZQCollectionViewCell.h"
 #import "UICollectionViewLeftAlignedLayout.h"
 #import "ZQReadyToDeleteView.h"
-#import "UIView+Explode.h"
 
 @interface ZQTokenView ()
 @property (strong, nonatomic) UICollectionView *collectionView;
 @property (strong, nonatomic) UITextField *textField;
+@property (strong, nonatomic) NSMutableArray *titleMutableArray;
+@property (strong, nonatomic) NSMutableDictionary<NSString *, UIColor *> *colorMutableMap;
+
 @end
 
 @implementation ZQTokenView {
@@ -68,11 +70,28 @@
     self.edgeInset = UIEdgeInsetsMake(5, 5, 5, 5);
     self.defaultTokenColor = [ZQCollectionViewCell grayTintColor];
     self.tokenSelectedColor = [[UIColor yellowColor] colorWithAlphaComponent:0.8];
-    self.titleArray = [NSMutableArray array];
-    self.colorMap = [NSMutableDictionary dictionary];
+    self.titleMutableArray = [NSMutableArray array];
+    self.colorMutableMap = [NSMutableDictionary dictionary];
 }
 
 #pragma mark - **************** getter/setter
+
+- (void)setTitleArray:(NSArray *)titleArray {
+    _titleMutableArray = [titleArray mutableCopy];
+}
+
+- (NSArray *)titleArray {
+    return [_titleMutableArray copy];
+}
+
+- (void)setColorMap:(NSDictionary<NSString *,UIColor *> *)colorMap {
+    _colorMutableMap = [colorMap mutableCopy];
+}
+
+- (NSDictionary<NSString *,UIColor *> *)colorMap {
+    return [_colorMutableMap mutableCopy];
+}
+
 - (void)setTokenSelectedColor:(UIColor *)tokenSelectedColor {
     _tokenSelectedColor = tokenSelectedColor;
     [self.collectionView.visibleCells enumerateObjectsUsingBlock:^(__kindof UICollectionViewCell * _Nonnull cell, NSUInteger idx, BOOL * _Nonnull stop) {
@@ -120,7 +139,6 @@
         [self.collectionView updateInteractiveMovementTargetPosition:gesturePosition];
         if (!CGRectContainsPoint(self.collectionView.bounds, gesturePosition)) {
             readyToDeleteView.hidden = NO;
-            
         } else {
             readyToDeleteView.hidden = YES;
         }
@@ -198,7 +216,7 @@
 #pragma mark - **************** UICollectionViewDataSource
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return self.titleArray.count;
+    return self.titleMutableArray.count;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -208,17 +226,16 @@
         NSLog(@"No matched cell identifier");
         return nil;
     }
-    cell.token.text = self.titleArray[indexPath.row];
-    UIColor *cellColor = self.colorMap[self.titleArray[indexPath.row]];
+    cell.token.text = self.titleMutableArray[indexPath.row];
+    UIColor *cellColor = self.colorMutableMap[self.titleMutableArray[indexPath.row]];
     cell.backgroundView.backgroundColor = cellColor ? cellColor : self.defaultTokenColor;
     cell.selectedBackgroundView.backgroundColor = self.tokenSelectedColor;
-    if (indexPath.row == self.titleArray.count - 1) {
+    if (indexPath.row == self.titleMutableArray.count - 1) {
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [self updateTextFieldPosition];
         });
     }
     return cell;
-    
 }
 
 - (BOOL)collectionView:(UICollectionView *)collectionView canMoveItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -227,9 +244,9 @@
 
 - (NSIndexPath *)collectionView:(UICollectionView *)collectionView targetIndexPathForMoveFromItemAtIndexPath:(NSIndexPath *)originalIndexPath toProposedIndexPath:(NSIndexPath *)proposedIndexPath {
     if (originalIndexPath.row != proposedIndexPath.row) {
-        NSString *sourceString = self.titleArray[originalIndexPath.row];
-        [self.titleArray removeObjectAtIndex:originalIndexPath.row];
-        [self.titleArray insertObject:sourceString atIndex:proposedIndexPath.row];
+        NSString *sourceString = self.titleMutableArray[originalIndexPath.row];
+        [self.titleMutableArray removeObjectAtIndex:originalIndexPath.row];
+        [self.titleMutableArray insertObject:sourceString atIndex:proposedIndexPath.row];
     }
     return proposedIndexPath;
 }
@@ -240,7 +257,7 @@
 
 #pragma mark - ****************UICollectionViewDelegateFlowLayout
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-    NSString *title = self.titleArray[indexPath.row];
+    NSString *title = self.titleMutableArray[indexPath.row];
     UIFont *font = [UIFont boldSystemFontOfSize:18];
     CGSize size = [title sizeWithAttributes:@{NSFontAttributeName : font}];
     size.height += 2;
@@ -260,7 +277,7 @@
 
 #pragma mark - **************** UITextFieldDelegate
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
-    [self insertToken:[textField.text substringFromIndex:1] intoIndex:self.titleArray.count];
+    [self insertToken:[textField.text substringFromIndex:1] intoIndex:self.titleMutableArray.count];
     // ------Detect backspace. http://stackoverflow.com/a/1983009
     textField.text = @"\u200B";
     [textField resignFirstResponder];
@@ -268,10 +285,10 @@
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
-    ZQCollectionViewCell *lastCell = (ZQCollectionViewCell *)[self.collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:self.titleArray.count - 1 inSection:0]];
+    ZQCollectionViewCell *lastCell = (ZQCollectionViewCell *)[self.collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:self.titleMutableArray.count - 1 inSection:0]];
     if (range.location == 0 && range.length == 1 && [textField.text isEqualToString:@"\u200B"]) {
         if (lastCell.highlighted) {
-            [self removeTokenAtIndex:self.titleArray.count - 1];
+            [self removeTokenAtIndex:self.titleMutableArray.count - 1];
         }
         lastCell.highlighted = !lastCell.highlighted;
         return NO;
@@ -284,9 +301,9 @@
 - (void)insertToken:(NSString *)title intoIndex:(NSInteger)index {
     if ([self.delegate respondsToSelector:@selector(tokenView:colorForTitle:)]) {
         UIColor *tokenColor = [self.delegate tokenView:self colorForTitle:title];
-        [self.colorMap setObject:tokenColor forKey:title];
+        [self.colorMutableMap setObject:tokenColor forKey:title];
     }
-    [self.titleArray insertObject:title atIndex:index];
+    [self.titleMutableArray insertObject:title atIndex:index];
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index inSection:0];
     [self.collectionView insertItemsAtIndexPaths:@[indexPath]];
     [self.collectionView reloadItemsAtIndexPaths:@[indexPath]];
@@ -297,9 +314,9 @@
 }
 
 - (void)removeTokenAtIndex:(NSInteger)index {
-    NSString *title = self.titleArray[index];
-    [self.colorMap removeObjectForKey:title];
-    [self.titleArray removeObjectAtIndex:index];
+    NSString *title = self.titleMutableArray[index];
+    [self.colorMutableMap removeObjectForKey:title];
+    [self.titleMutableArray removeObjectAtIndex:index];
     [self.collectionView deleteItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:index inSection:0]]];
     [self updateTextFieldPosition];
     if ([self.delegate respondsToSelector:@selector(tokenView:didRemoveTokenAtIndex:)]) {
@@ -308,14 +325,14 @@
 }
 
 - (void)moveTokenFromIndex:(NSInteger)sourceIndex toIndex:(NSInteger)destinationIndex {
-    NSString *movingTitle = self.titleArray[sourceIndex];
-    [self.titleArray removeObjectAtIndex:sourceIndex];
-    [self.titleArray insertObject:movingTitle atIndex:destinationIndex];
+    NSString *movingTitle = self.titleMutableArray[sourceIndex];
+    [self.titleMutableArray removeObjectAtIndex:sourceIndex];
+    [self.titleMutableArray insertObject:movingTitle atIndex:destinationIndex];
     [self.collectionView moveItemAtIndexPath:[NSIndexPath indexPathForRow:sourceIndex inSection:0] toIndexPath:[NSIndexPath indexPathForRow:destinationIndex inSection:0]];
 }
 
 - (void)reverseTokens {
-    self.titleArray = [[self.titleArray.reverseObjectEnumerator allObjects] mutableCopy];
+    self.titleMutableArray = [[self.titleMutableArray.reverseObjectEnumerator allObjects] mutableCopy];
     [self.collectionView reloadData];
 }
 

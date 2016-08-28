@@ -40,7 +40,6 @@
     self.token.textColor = [UIColor blackColor];
     self.token.font = [UIFont boldSystemFontOfSize:18];
     
-    
     [self.contentView addSubview:self.token];
     [self addConstraint:[NSLayoutConstraint constraintWithItem:self.token attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeTop multiplier:1 constant:0]];
     [self addConstraint:[NSLayoutConstraint constraintWithItem:self.token attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeBottom multiplier:1 constant:0]];

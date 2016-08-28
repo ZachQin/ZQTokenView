@@ -17,10 +17,10 @@
 @end
 
 @interface ZQTokenView : UIView <UICollectionViewDelegate, UICollectionViewDataSource, UITextFieldDelegate>
-@property (strong, nonatomic) NSMutableArray *titleArray;
-@property (strong, nonatomic) NSMutableDictionary<NSString *, UIColor *> *colorMap;
-@property (strong, nonatomic) UIColor *defaultTokenColor;
-@property (strong, nonatomic) UIColor *tokenSelectedColor;
+@property (copy, nonatomic) NSArray *titleArray;
+@property (copy, nonatomic) NSDictionary<NSString *, UIColor *> *colorMap;
+@property (copy, nonatomic) UIColor *defaultTokenColor;
+@property (copy, nonatomic) UIColor *tokenSelectedColor;
 @property (nonatomic) UIEdgeInsets edgeInset;
 @property (nonatomic) NSInteger minimumTokenHorizontalSpacing;
 @property (nonatomic) NSInteger minimumTokenVerticalSpacing;

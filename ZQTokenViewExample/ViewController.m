@@ -2,7 +2,7 @@
 //  ViewController.m
 //  ZQTokenViewExample
 //
-//  Created by 秦智康 on 16/8/26.
+//  Created by ZachQin on 16/8/26.
 //  Copyright © 2016年 ZachQin. All rights reserved.
 //
 
@@ -31,9 +31,11 @@
                                  @"Roberta Pedersen",
                                  @"Earl Rashid",
                                  @"Matthew Hooks", nil];
+    NSMutableDictionary *colorMap = [NSMutableDictionary dictionary];
     [self.tokenView.titleArray enumerateObjectsUsingBlock:^(NSString *title, NSUInteger idx, BOOL * _Nonnull stop) {
-        self.tokenView.colorMap[title] = [self randomColor];
+         colorMap[title] = [self randomColor];
     }];
+    self.tokenView.colorMap = colorMap;
 }
 
 - (UIColor *)tokenView:(ZQTokenView *)tokenView colorForTitle:(NSString *)title {
