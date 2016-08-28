@@ -10,24 +10,24 @@
 @class ZQTokenView;
 @protocol ZQTokenViewDelegate <NSObject>
 @optional
-- (UIColor *)tokenView:(ZQTokenView *)tokenView colorForTitle:(NSString *)title;
-- (void)tokenView:(ZQTokenView *)tokenView didSelectToken:(UILabel *)token atIndex:(NSInteger)index;
-- (void)tokenView:(ZQTokenView *)tokenView didInsertToken:(UILabel *)token atIndex:(NSInteger)index;
-- (void)tokenView:(ZQTokenView *)tokenView didRemoveTokenAtIndex:(NSInteger)index;
+- ( UIColor * _Nonnull )tokenView:(ZQTokenView * _Nonnull)tokenView colorForTitle:(NSString * _Nonnull)title;
+- (void)tokenView:(ZQTokenView * _Nonnull)tokenView didSelectToken:(UILabel * _Nonnull)token atIndex:(NSInteger)index;
+- (void)tokenView:(ZQTokenView * _Nonnull)tokenView didInsertToken:(UILabel * _Nonnull)token atIndex:(NSInteger)index;
+- (void)tokenView:(ZQTokenView * _Nonnull)tokenView didRemoveTokenAtIndex:(NSInteger)index;
 @end
 
 @interface ZQTokenView : UIView <UICollectionViewDelegate, UICollectionViewDataSource, UITextFieldDelegate>
-@property (copy, nonatomic) NSArray *titleArray;
-@property (copy, nonatomic) NSDictionary<NSString *, UIColor *> *colorMap;
-@property (copy, nonatomic) UIColor *defaultTokenColor;
-@property (copy, nonatomic) UIColor *tokenSelectedColor;
+@property (copy, nonatomic, nonnull) NSArray *titleArray;
+@property (copy, nonatomic, nonnull) NSDictionary<NSString *, UIColor *> *colorMap;
+@property (copy, nonatomic, nonnull) UIColor *defaultTokenColor;
+@property (copy, nonatomic, nonnull) UIColor *tokenSelectedColor;
 @property (nonatomic) UIEdgeInsets edgeInset;
 @property (nonatomic) NSInteger minimumTokenHorizontalSpacing;
 @property (nonatomic) NSInteger minimumTokenVerticalSpacing;
 
-@property (weak) id<ZQTokenViewDelegate> delegate;
+@property (weak, nullable) id<ZQTokenViewDelegate> delegate;
 
-- (void)insertToken:(NSString *)title intoIndex:(NSInteger)index;
+- (void)insertToken:(NSString * _Nonnull)title intoIndex:(NSInteger)index;
 - (void)removeTokenAtIndex:(NSInteger)index;
 - (void)moveTokenFromIndex:(NSInteger)sourceIndex toIndex:(NSInteger)destinationIndex;
 /**
