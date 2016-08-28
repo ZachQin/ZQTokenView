@@ -4,21 +4,21 @@ An iOS View based on UICollectionView. It implements draging to order and drag o
 
 ## Screenshots
 
-1. Drag & Move
+### Drag & Move
 
 ![](https://raw.githubusercontent.com/ZachQin/ZQTokenView/master/Screenshots/move.gif)
 
-2. Add
+### Add
 
 ![](https://raw.githubusercontent.com/ZachQin/ZQTokenView/master/Screenshots/add.gif)
 
-3. Delete
+### Delete
 
 ![](https://raw.githubusercontent.com/ZachQin/ZQTokenView/master/Screenshots/delete.gif)
 
 ![](https://raw.githubusercontent.com/ZachQin/ZQTokenView/master/Screenshots/delete2.gif)
 
-4. Click
+### Click
 
 ![](https://raw.githubusercontent.com/ZachQin/ZQTokenView/master/Screenshots/click.gif)
 
