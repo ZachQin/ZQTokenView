@@ -12,11 +12,11 @@
 #import "ZQReadyToDeleteView.h"
 
 @interface ZQTokenView ()
+@property (strong, nonatomic) UILabel *tokenPlaceHolderLabel;
 @property (strong, nonatomic) UICollectionView *collectionView;
 @property (strong, nonatomic) UITextField *textField;
 @property (strong, nonatomic) NSMutableArray *titleMutableArray;
 @property (strong, nonatomic) NSMutableDictionary<NSString *, UIColor *> *colorMutableMap;
-
 @end
 
 @implementation ZQTokenView {
@@ -63,6 +63,22 @@
     self.textField.textColor = [UIColor whiteColor];
     self.textField.delegate = self;
     [self.collectionView addSubview:self.textField];
+    
+    // ------setup TokenTextHolderLabel
+    self.tokenPlaceHolderLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, 40)];
+    self.tokenPlaceHolderLabel.text = @"Tap here to create.";
+    self.tokenPlaceHolderLabel.numberOfLines = 0;
+    [self.collectionView addSubview:self.tokenPlaceHolderLabel];
+    self.tokenPlaceHolderLabel.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.collectionView addConstraint:[NSLayoutConstraint constraintWithItem:self.tokenPlaceHolderLabel attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self.collectionView attribute:NSLayoutAttributeCenterX multiplier:1 constant:0]];
+    [self.collectionView addConstraint:[NSLayoutConstraint constraintWithItem:self.tokenPlaceHolderLabel attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self.collectionView attribute:NSLayoutAttributeCenterY multiplier:1 constant:0]];
+    [self.collectionView addConstraint:[NSLayoutConstraint constraintWithItem:self.tokenPlaceHolderLabel attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationGreaterThanOrEqual toItem:self.collectionView attribute:NSLayoutAttributeLeft multiplier:1 constant:20]];
+    [self.collectionView addConstraint:[NSLayoutConstraint constraintWithItem:self.tokenPlaceHolderLabel attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationGreaterThanOrEqual toItem:self.collectionView attribute:NSLayoutAttributeRight multiplier:1 constant:20]];
+    self.tokenPlaceHolderLabel.font = [UIFont systemFontOfSize:20];
+    self.tokenPlaceHolderLabel.textColor = [UIColor grayColor];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self.tokenPlaceHolderLabel sizeToFit];
+    });
     
     // ------setup Data
     self.minimumTokenHorizontalSpacing = 5;
@@ -186,7 +202,8 @@
 }
 
 #pragma mark - **************** layout
-- (void)updateTextFieldPosition {
+- (void)updateTextFieldPositionAndPlaceHolderLabelHidden {
+    // ------Update TextFieldPosition
     NSIndexPath *path = [NSIndexPath indexPathForRow:[self.collectionView numberOfItemsInSection:0] - 1 inSection:0];
     UICollectionViewCell *lastCell = [self.collectionView cellForItemAtIndexPath:path];
     UIEdgeInsets insets = self.edgeInset;
@@ -204,12 +221,14 @@
         self.textField.frame = CGRectMake(insets.left + 8, insets.top, self.bounds.size.width - insets.left - insets.right - 8, 23.5);
     }
     
+    // ------Update PlaceHolderLabelHidden
+    self.tokenPlaceHolderLabel.hidden = self.collectionView.visibleCells.count > 0;
 }
 
 - (void)layoutSubviews {
     [super layoutSubviews];
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self updateTextFieldPosition];
+        [self updateTextFieldPositionAndPlaceHolderLabelHidden];
     });
 }
 
@@ -232,7 +251,7 @@
     cell.selectedBackgroundView.backgroundColor = self.tokenSelectedColor;
     if (indexPath.row == self.titleMutableArray.count - 1) {
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [self updateTextFieldPosition];
+            [self updateTextFieldPositionAndPlaceHolderLabelHidden];
         });
     }
     return cell;
@@ -252,7 +271,7 @@
 }
 
 - (void)collectionView:(UICollectionView *)collectionView moveItemAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath {
-    [self updateTextFieldPosition];
+    [self updateTextFieldPositionAndPlaceHolderLabelHidden];
 }
 
 #pragma mark - ****************UICollectionViewDelegateFlowLayout
@@ -307,7 +326,7 @@
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index inSection:0];
     [self.collectionView insertItemsAtIndexPaths:@[indexPath]];
     [self.collectionView reloadItemsAtIndexPaths:@[indexPath]];
-    [self updateTextFieldPosition];
+    [self updateTextFieldPositionAndPlaceHolderLabelHidden];
     if ([self.delegate respondsToSelector:@selector(tokenView:didInsertToken:atIndex:)]) {
         [self.delegate tokenView:self didInsertToken:((ZQCollectionViewCell *)[self.collectionView cellForItemAtIndexPath:indexPath]).token atIndex:index];
     }
@@ -318,7 +337,7 @@
     [self.colorMutableMap removeObjectForKey:title];
     [self.titleMutableArray removeObjectAtIndex:index];
     [self.collectionView deleteItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:index inSection:0]]];
-    [self updateTextFieldPosition];
+    [self updateTextFieldPositionAndPlaceHolderLabelHidden];
     if ([self.delegate respondsToSelector:@selector(tokenView:didRemoveTokenAtIndex:)]) {
         [self.delegate tokenView:self didRemoveTokenAtIndex:index];
     }
