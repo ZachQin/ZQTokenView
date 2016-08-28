@@ -1,6 +1,6 @@
 # ZQTokenView
 
-An iOS View based on UICollectionView. It implements draging to order and drag out to delete Operation.
+An iOS View based on UICollectionView. It implements draging to order and delete.
 
 ## Screenshots
 
