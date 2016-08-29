@@ -52,6 +52,7 @@
     
     // ------setup recognizer
     UILongPressGestureRecognizer *longPressGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongGesture:)];
+    longPressGestureRecognizer.minimumPressDuration = 0.2;
     [self.collectionView addGestureRecognizer:longPressGestureRecognizer];
     UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGesture:)];
     [self.collectionView.backgroundView addGestureRecognizer:tapGestureRecognizer];
@@ -150,19 +151,20 @@
         readyToDeleteView = [[ZQReadyToDeleteView alloc] initWithFrame:CGRectMake(-20, movingCell.bounds.size.height / 2 - 20, 40, 40)];
         [movingCell addSubview:readyToDeleteView];
         readyToDeleteView.hidden = YES;
-        [UIView animateWithDuration:0.2 animations:^{
-            movingCell.frame = CGRectOffset(movingCell.frame, 0, verticalOffset);
+        gesturePosition.y += verticalOffset;
+        [UIView animateWithDuration:0.3 animations:^{
+            [self.collectionView updateInteractiveMovementTargetPosition:gesturePosition];
         }];
     } else if (longPressGestureRecognizer.state == UIGestureRecognizerStateChanged) {
         gesturePosition.y += verticalOffset;
         [self.collectionView updateInteractiveMovementTargetPosition:gesturePosition];
+        gesturePosition.y -= verticalOffset;
         if (!CGRectContainsPoint(self.collectionView.bounds, gesturePosition)) {
             readyToDeleteView.hidden = NO;
         } else {
             readyToDeleteView.hidden = YES;
         }
     } else if (longPressGestureRecognizer.state == UIGestureRecognizerStateEnded) {
-        gesturePosition.y += verticalOffset;
         [self.collectionView endInteractiveMovement];
         if (!CGRectContainsPoint(self.collectionView.bounds, gesturePosition)) {
             [self explodeOnView:self.collectionView frame:CGRectMake(gesturePosition.x - 60, gesturePosition.y - 25, 50, 50)];
