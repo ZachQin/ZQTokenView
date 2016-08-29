@@ -308,8 +308,12 @@
         shoudInsert = [self.delegate tokenView:self shoudInsertTitle:[textField.text substringFromIndex:1] atIndex:self.titleMutableArray.count];
     }
     if (shoudInsert) {
+        NSString *insertedTitle = [textField.text substringFromIndex:1];
         NSInteger index = self.titleMutableArray.count;
-        [self insertToken:[textField.text substringFromIndex:1] intoIndex:index];
+        if ([self.delegate respondsToSelector:@selector(tokenView:titleToReplaceOriginalTitle:atIndex:)]) {
+            insertedTitle = [self.delegate tokenView:self titleToReplaceOriginalTitle:insertedTitle atIndex:index];
+        }
+        [self insertToken:insertedTitle intoIndex:index];
         if ([self.delegate respondsToSelector:@selector(tokenView:didInsertToken:atIndex:)]) {
             NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index inSection:0];
             [self.delegate tokenView:self didInsertToken:((ZQCollectionViewCell *)[self.collectionView cellForItemAtIndexPath:indexPath]).token atIndex:index];

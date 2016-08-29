@@ -38,6 +38,16 @@
  */
 - (void)tokenView:(ZQTokenView * _Nonnull)tokenView didSelectToken:(UILabel * _Nonnull)token atIndex:(NSInteger)index;
 /**
+ *  Give you a chance to change the inserted title after type 'RETURN'
+ *
+ *  @param tokenView The token view containing the token.
+ *  @param title     The inserted origin token title.
+ *  @param index     The inserted token index.
+ *
+ *  @return The new title to replace the orginal title.
+ */
+- (NSString * _Nonnull)tokenView:(ZQTokenView * _Nonnull)tokenView titleToReplaceOriginalTitle:(NSString * _Nonnull)title atIndex:(NSInteger)index;
+/**
  *  Tells the delegate that the title at the specified index was Inserted. Usually called after typing 'RETURN'
  *
  *  @param tokenView The token view containing the token label.
