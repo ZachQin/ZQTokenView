@@ -137,6 +137,8 @@
 #pragma mark - **************** Action
 - (void)handleLongGesture:(UILongPressGestureRecognizer *)longPressGestureRecognizer {
     CGPoint gesturePosition = [longPressGestureRecognizer locationInView:self.collectionView];
+    // ------ Add y-coordinate offset when moving.
+    CGFloat verticalOffset = -20;
     if (longPressGestureRecognizer.state == UIGestureRecognizerStateBegan) {
         [self.textField resignFirstResponder];
         NSIndexPath *movingIndexPath = [self.collectionView indexPathForItemAtPoint:gesturePosition];
@@ -148,7 +150,11 @@
         readyToDeleteView = [[ZQReadyToDeleteView alloc] initWithFrame:CGRectMake(-20, movingCell.bounds.size.height / 2 - 20, 40, 40)];
         [movingCell addSubview:readyToDeleteView];
         readyToDeleteView.hidden = YES;
+        [UIView animateWithDuration:0.2 animations:^{
+            movingCell.frame = CGRectOffset(movingCell.frame, 0, verticalOffset);
+        }];
     } else if (longPressGestureRecognizer.state == UIGestureRecognizerStateChanged) {
+        gesturePosition.y += verticalOffset;
         [self.collectionView updateInteractiveMovementTargetPosition:gesturePosition];
         if (!CGRectContainsPoint(self.collectionView.bounds, gesturePosition)) {
             readyToDeleteView.hidden = NO;
@@ -156,6 +162,7 @@
             readyToDeleteView.hidden = YES;
         }
     } else if (longPressGestureRecognizer.state == UIGestureRecognizerStateEnded) {
+        gesturePosition.y += verticalOffset;
         [self.collectionView endInteractiveMovement];
         if (!CGRectContainsPoint(self.collectionView.bounds, gesturePosition)) {
             [self explodeOnView:self.collectionView frame:CGRectMake(gesturePosition.x - 60, gesturePosition.y - 25, 50, 50)];
