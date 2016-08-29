@@ -38,6 +38,16 @@
     self.tokenView.colorMap = colorMap;
 }
 
+
+
+- (UIColor *)randomColor {
+    CGFloat red = arc4random() % 255 / 255.0;
+    CGFloat green = arc4random() % 255 / 255.0;
+    CGFloat blue = arc4random() % 255 / 255.0;
+    return [UIColor colorWithRed:red green:green blue:blue alpha:1.0];
+}
+
+#pragma mark - **************** delegate
 - (UIColor *)tokenView:(ZQTokenView *)tokenView colorForTitle:(NSString *)title {
     return [self randomColor];
 }
@@ -52,16 +62,8 @@
     [self presentViewController:alertVC animated:YES completion:nil];
 }
 
-- (UIColor *)randomColor {
-    CGFloat red = arc4random() % 255 / 255.0;
-    CGFloat green = arc4random() % 255 / 255.0;
-    CGFloat blue = arc4random() % 255 / 255.0;
-    return [UIColor colorWithRed:red green:green blue:blue alpha:1.0];
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+- (BOOL)tokenView:(ZQTokenView *)tokenView shoudInsertTitle:(NSString *)title atIndex:(NSInteger)index {
+    return title.length > 0;
 }
 
 @end

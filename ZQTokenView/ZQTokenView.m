@@ -171,8 +171,11 @@
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                 movingCell.hidden = NO;
             });
-            [self removeTokenAtIndex:[self.collectionView indexPathForCell:movingCell].row];
-            
+            NSInteger removedIndex = [self.collectionView indexPathForCell:movingCell].row;
+            [self removeTokenAtIndex:removedIndex];
+            if ([self.delegate respondsToSelector:@selector(tokenView:didRemoveTokenAtIndex:)]) {
+                [self.delegate tokenView:self didRemoveTokenAtIndex:removedIndex];
+            }
         }
         [readyToDeleteView removeFromSuperview];
     } else {
@@ -300,7 +303,18 @@
 
 #pragma mark - **************** UITextFieldDelegate
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
-    [self insertToken:[textField.text substringFromIndex:1] intoIndex:self.titleMutableArray.count];
+    BOOL shoudInsert = YES;
+    if ([self.delegate respondsToSelector:@selector(tokenView:shoudInsertTitle:atIndex:)]) {
+        shoudInsert = [self.delegate tokenView:self shoudInsertTitle:[textField.text substringFromIndex:1] atIndex:self.titleMutableArray.count];
+    }
+    if (shoudInsert) {
+        NSInteger index = self.titleMutableArray.count;
+        [self insertToken:[textField.text substringFromIndex:1] intoIndex:index];
+        if ([self.delegate respondsToSelector:@selector(tokenView:didInsertToken:atIndex:)]) {
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index inSection:0];
+            [self.delegate tokenView:self didInsertToken:((ZQCollectionViewCell *)[self.collectionView cellForItemAtIndexPath:indexPath]).token atIndex:index];
+        }
+    }
     // ------Detect backspace. http://stackoverflow.com/a/1983009
     textField.text = @"\u200B";
     [textField resignFirstResponder];
@@ -311,7 +325,11 @@
     ZQCollectionViewCell *lastCell = (ZQCollectionViewCell *)[self.collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:self.titleMutableArray.count - 1 inSection:0]];
     if (range.location == 0 && range.length == 1 && [textField.text isEqualToString:@"\u200B"]) {
         if (lastCell.highlighted) {
-            [self removeTokenAtIndex:self.titleMutableArray.count - 1];
+            NSInteger removedIndex = self.titleMutableArray.count - 1;
+            [self removeTokenAtIndex:removedIndex];
+            if ([self.delegate respondsToSelector:@selector(tokenView:didRemoveTokenAtIndex:)]) {
+                [self.delegate tokenView:self didRemoveTokenAtIndex:removedIndex];
+            }
         }
         lastCell.highlighted = !lastCell.highlighted;
         return NO;
@@ -331,9 +349,6 @@
     [self.collectionView insertItemsAtIndexPaths:@[indexPath]];
     [self.collectionView reloadItemsAtIndexPaths:@[indexPath]];
     [self updateTextFieldPositionAndPlaceHolderLabelHidden];
-    if ([self.delegate respondsToSelector:@selector(tokenView:didInsertToken:atIndex:)]) {
-        [self.delegate tokenView:self didInsertToken:((ZQCollectionViewCell *)[self.collectionView cellForItemAtIndexPath:indexPath]).token atIndex:index];
-    }
 }
 
 - (void)removeTokenAtIndex:(NSInteger)index {
@@ -342,9 +357,6 @@
     [self.titleMutableArray removeObjectAtIndex:index];
     [self.collectionView deleteItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:index inSection:0]]];
     [self updateTextFieldPositionAndPlaceHolderLabelHidden];
-    if ([self.delegate respondsToSelector:@selector(tokenView:didRemoveTokenAtIndex:)]) {
-        [self.delegate tokenView:self didRemoveTokenAtIndex:index];
-    }
 }
 
 - (void)moveTokenFromIndex:(NSInteger)sourceIndex toIndex:(NSInteger)destinationIndex {
