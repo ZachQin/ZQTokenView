@@ -62,6 +62,15 @@
  *  @param index     The removed token index.
  */
 - (void)tokenView:(ZQTokenView * _Nonnull)tokenView didRemoveTokenAtIndex:(NSInteger)index;
+/**
+ *  Tells the delegate that the token at the source index was moved to destination index.
+ *
+ *  @param tokenView        The token view containing the moved token label.
+ *  @param sourceIndex      The index of the source token.
+ *  @param destinationIndex The index of the destination token.
+ */
+- (void)tokenView:(ZQTokenView * _Nonnull)tokenView didMoveItemAtIndex:(NSInteger)sourceIndex toIndex:(NSInteger)destinationIndex;
+
 @end
 
 @interface ZQTokenView : UIView <UICollectionViewDelegate, UICollectionViewDataSource, UITextFieldDelegate>

@@ -281,6 +281,9 @@
 
 - (void)collectionView:(UICollectionView *)collectionView moveItemAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath {
     [self updateTextFieldPositionAndPlaceHolderLabelHidden];
+    if ([self.delegate respondsToSelector:@selector(tokenView:didMoveItemAtIndex:toIndex:)]) {
+        [self.delegate tokenView:self didMoveItemAtIndex:sourceIndexPath.row toIndex:destinationIndexPath.row];
+    }
 }
 
 #pragma mark - ****************UICollectionViewDelegateFlowLayout
