@@ -66,7 +66,7 @@
  */
 - (void)tokenView:(ZQTokenView * _Nonnull)tokenView didInsertToken:(UILabel * _Nonnull)token atIndex:(NSInteger)index;
 /**
- *  Tells the delegate that the title at the specified index was removed. Usually called after typing backspace or drag the token outside. 
+ *  Tells the delegate that the title at the specified index was removed. Usually called after typing backspace or drag the token outside. When pushing clear button, it will be called many times. 
  *
  *  @param tokenView The token view containing the removed token label.
  *  @param index     The removed token index.

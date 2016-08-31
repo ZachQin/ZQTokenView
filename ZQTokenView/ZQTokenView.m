@@ -108,7 +108,7 @@
 - (void)clearAllToken:(UIButton *)sender {
     NSInteger count = self.titleMutableArray.count;
     for (int i = 0; i < count; i++) {
-        [self removeTokenAtIndex:0];
+        [self removeTokenAtIndex:count - i - 1];
         if ([self.delegate respondsToSelector:@selector(tokenView:didRemoveTokenAtIndex:)]) {
             [self.delegate tokenView:self didRemoveTokenAtIndex:0];
         }
