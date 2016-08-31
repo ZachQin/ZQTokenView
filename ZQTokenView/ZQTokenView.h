@@ -85,6 +85,8 @@
 
 @interface ZQTokenView : UIView <UICollectionViewDelegate, UICollectionViewDataSource, UITextFieldDelegate>
 @property (strong, nonatomic, readonly, nonnull) UILabel *tokenPlaceHolderLabel;
+@property (nonatomic, getter=isContainClearButton) BOOL containClearButton;
+@property (strong, nonatomic, readonly, nonnull) UIButton *clearButton;
 @property (copy, nonatomic, nonnull) NSArray *titleArray;
 @property (copy, nonatomic, nonnull) NSDictionary<NSString *, UIColor *> *colorMap;
 @property (copy, nonatomic, nonnull) UIColor *defaultTokenColor;

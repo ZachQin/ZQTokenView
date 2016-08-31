@@ -35,6 +35,7 @@
     [self.tokenView.titleArray enumerateObjectsUsingBlock:^(NSString *title, NSUInteger idx, BOOL * _Nonnull stop) {
          colorMap[title] = [self randomColor];
     }];
+    self.tokenView.containClearButton = YES;
     self.tokenView.colorMap = colorMap;
 }
 

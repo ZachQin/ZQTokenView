@@ -13,6 +13,7 @@
 
 @interface ZQTokenView ()
 @property (strong, nonatomic) UILabel *tokenPlaceHolderLabel;
+@property (strong, nonatomic) UIButton *clearButton;
 @property (strong, nonatomic) UICollectionView *collectionView;
 @property (strong, nonatomic) UITextField *textField;
 @property (strong, nonatomic) NSMutableArray *titleMutableArray;
@@ -78,6 +79,21 @@
     self.tokenPlaceHolderLabel.font = [UIFont systemFontOfSize:20];
     self.tokenPlaceHolderLabel.textColor = [UIColor grayColor];
     
+    // ------ setup clear button
+    self.containClearButton = NO;
+    self.clearButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    [self.clearButton setTitle:@"Clear" forState:UIControlStateNormal];
+    [self addSubview:self.clearButton];
+    self.clearButton.translatesAutoresizingMaskIntoConstraints = NO;
+    [self addConstraint:[NSLayoutConstraint constraintWithItem:self.clearButton attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeRight multiplier:1 constant:-20]];
+    [self addConstraint:[NSLayoutConstraint constraintWithItem:self.clearButton attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeBottom multiplier:1 constant:-10]];
+    [self.clearButton setTitleColor:[ZQCollectionViewCell grayTintColor] forState:UIControlStateNormal];
+    self.clearButton.backgroundColor = [UIColor darkGrayColor];
+    self.clearButton.contentEdgeInsets = UIEdgeInsetsMake(10, 10, 10, 10);
+    self.clearButton.layer.cornerRadius = 5;
+    self.clearButton.hidden = YES;
+    [self.clearButton addTarget:self action:@selector(clearAllToken:) forControlEvents:UIControlEventTouchUpInside];
+    
     // ------setup Data
     self.minimumTokenHorizontalSpacing = 5;
     self.minimumTokenVerticalSpacing = 10;
@@ -86,6 +102,17 @@
     self.tokenSelectedColor = [[UIColor yellowColor] colorWithAlphaComponent:0.8];
     self.titleMutableArray = [NSMutableArray array];
     self.colorMutableMap = [NSMutableDictionary dictionary];
+}
+
+#pragma mark - **************** action
+- (void)clearAllToken:(UIButton *)sender {
+    NSInteger count = self.titleMutableArray.count;
+    for (int i = 0; i < count; i++) {
+        [self removeTokenAtIndex:0];
+        if ([self.delegate respondsToSelector:@selector(tokenView:didRemoveTokenAtIndex:)]) {
+            [self.delegate tokenView:self didRemoveTokenAtIndex:0];
+        }
+    }
 }
 
 #pragma mark - **************** getter/setter
@@ -217,7 +244,7 @@
 }
 
 #pragma mark - **************** layout
-- (void)updateTextFieldPositionAndPlaceHolderLabelHidden {
+- (void)updatePositionAndHidden {
     // ------Update TextFieldPosition
     NSIndexPath *path = [NSIndexPath indexPathForRow:[self.collectionView numberOfItemsInSection:0] - 1 inSection:0];
     UICollectionViewCell *lastCell = [self.collectionView cellForItemAtIndexPath:path];
@@ -238,12 +265,14 @@
     
     // ------Update PlaceHolderLabelHidden
     self.tokenPlaceHolderLabel.hidden = self.collectionView.visibleCells.count > 0;
+    // ------Update clear button hidden
+    self.clearButton.hidden = !(self.collectionView.visibleCells.count > 0 && self.isContainClearButton);
 }
 
 - (void)layoutSubviews {
     [super layoutSubviews];
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self updateTextFieldPositionAndPlaceHolderLabelHidden];
+        [self updatePositionAndHidden];
     });
 }
 
@@ -266,7 +295,7 @@
     cell.selectedBackgroundView.backgroundColor = self.tokenSelectedColor;
     if (indexPath.row == self.titleMutableArray.count - 1) {
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [self updateTextFieldPositionAndPlaceHolderLabelHidden];
+            [self updatePositionAndHidden];
         });
     }
     return cell;
@@ -286,7 +315,7 @@
 }
 
 - (void)collectionView:(UICollectionView *)collectionView moveItemAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath {
-    [self updateTextFieldPositionAndPlaceHolderLabelHidden];
+    [self updatePositionAndHidden];
     if ([self.delegate respondsToSelector:@selector(tokenView:didMoveItemAtIndex:toIndex:)]) {
         [self.delegate tokenView:self didMoveItemAtIndex:sourceIndexPath.row toIndex:destinationIndexPath.row];
     }
@@ -363,7 +392,7 @@
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index inSection:0];
     [self.collectionView insertItemsAtIndexPaths:@[indexPath]];
     [self.collectionView reloadItemsAtIndexPaths:@[indexPath]];
-    [self updateTextFieldPositionAndPlaceHolderLabelHidden];
+    [self updatePositionAndHidden];
 }
 
 - (void)removeTokenAtIndex:(NSInteger)index {
@@ -371,7 +400,7 @@
     [self.colorMutableMap removeObjectForKey:title];
     [self.titleMutableArray removeObjectAtIndex:index];
     [self.collectionView deleteItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:index inSection:0]]];
-    [self updateTextFieldPositionAndPlaceHolderLabelHidden];
+    [self updatePositionAndHidden];
 }
 
 - (void)moveTokenFromIndex:(NSInteger)sourceIndex toIndex:(NSInteger)destinationIndex {
