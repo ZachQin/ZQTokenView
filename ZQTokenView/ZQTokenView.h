@@ -73,6 +73,13 @@
  */
 - (void)tokenView:(ZQTokenView * _Nonnull)tokenView didRemoveTokenAtIndex:(NSInteger)index;
 /**
+ *  Tells the delegate that the title at the specified index was removed. Usually called after typing backspace or drag the token outside. When pushing clear button, it will be called many times.
+ *
+ *  @param tokenView The token view containing the removed token label.
+ *  @param index     The removed token index.
+ */
+- (void)tokenViewdidRemoveAllTokens:(ZQTokenView * _Nonnull)tokenView;
+/**
  *  Tells the delegate that the token at the source index was moved to destination index.
  *
  *  @param tokenView        The token view containing the moved token label.
@@ -109,6 +116,10 @@
  *  @param index The token index to be removed.
  */
 - (void)removeTokenAtIndex:(NSInteger)index;
+/**
+ *  Remove all token. Delegate will NOT be called.
+ */
+- (void)removeAllTokens;
 /**
  *  Move token from source index to destination index.
  *

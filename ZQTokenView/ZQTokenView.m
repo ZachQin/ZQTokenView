@@ -106,12 +106,9 @@
 
 #pragma mark - **************** action
 - (void)clearAllToken:(UIButton *)sender {
-    NSInteger count = self.titleMutableArray.count;
-    for (int i = 0; i < count; i++) {
-        [self removeTokenAtIndex:count - i - 1];
-        if ([self.delegate respondsToSelector:@selector(tokenView:didRemoveTokenAtIndex:)]) {
-            [self.delegate tokenView:self didRemoveTokenAtIndex:0];
-        }
+    [self removeAllTokens];
+    if ([self.delegate respondsToSelector:@selector(tokenViewdidRemoveAllTokens:)]) {
+        [self.delegate tokenViewdidRemoveAllTokens:self];
     }
 }
 
@@ -400,6 +397,13 @@
     [self.colorMutableMap removeObjectForKey:title];
     [self.titleMutableArray removeObjectAtIndex:index];
     [self.collectionView deleteItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:index inSection:0]]];
+    [self updatePositionAndHidden];
+}
+
+- (void)removeAllTokens {
+    [self.colorMutableMap removeAllObjects];
+    [self.titleMutableArray removeAllObjects];
+    [self.collectionView reloadData];
     [self updatePositionAndHidden];
 }
 
