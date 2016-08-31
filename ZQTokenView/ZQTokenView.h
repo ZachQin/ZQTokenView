@@ -30,6 +30,16 @@
  */
 - (BOOL)tokenView:(ZQTokenView * _Nonnull)tokenView shoudInsertTitle:(NSString * _Nonnull)title atIndex:(NSInteger)index;
 /**
+ *  Asks your delegate whether remove the specific token title when type backspace or drag the token outside.
+ *
+ *  @param tokenView The token view containing the token title.
+ *  @param title     The removed token title.
+ *  @param index     The index of removed title.
+ *
+ *  @return YES if the title is allowed to insert or NO if it is not.
+ */
+- (BOOL)tokenView:(ZQTokenView * _Nonnull)tokenView shoudRemoveTitle:(NSString * _Nonnull)title atIndex:(NSInteger)index;
+/**
  *  Tells the delegate that the title at the specified index was selected.
  *
  *  @param tokenView The token view containing the token label.

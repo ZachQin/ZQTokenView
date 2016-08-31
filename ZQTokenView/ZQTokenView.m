@@ -166,17 +166,23 @@
         }
     } else if (longPressGestureRecognizer.state == UIGestureRecognizerStateEnded) {
         [self.collectionView endInteractiveMovement];
-        if (!CGRectContainsPoint(self.collectionView.bounds, gesturePosition)) {
-            [self explodeOnView:self.collectionView frame:CGRectMake(gesturePosition.x - 60, gesturePosition.y - 25, 50, 50)];
-            // ------ For avoiding the cell move back
-            movingCell.hidden = YES;
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                movingCell.hidden = NO;
-            });
-            NSInteger removedIndex = [self.collectionView indexPathForCell:movingCell].row;
-            [self removeTokenAtIndex:removedIndex];
-            if ([self.delegate respondsToSelector:@selector(tokenView:didRemoveTokenAtIndex:)]) {
-                [self.delegate tokenView:self didRemoveTokenAtIndex:removedIndex];
+        BOOL shoudRemove = YES;
+        NSInteger removedIndex = [self.collectionView indexPathForCell:movingCell].row;
+        if ([self.delegate respondsToSelector:@selector(tokenView:shoudRemoveTitle:atIndex:)]) {
+            shoudRemove = [self.delegate tokenView:self shoudRemoveTitle:movingCell.token.text atIndex:removedIndex];
+        }
+        if (shoudRemove) {
+            if (!CGRectContainsPoint(self.collectionView.bounds, gesturePosition)) {
+                [self explodeOnView:self.collectionView frame:CGRectMake(gesturePosition.x - 60, gesturePosition.y - 25, 50, 50)];
+                // ------ For avoiding the cell move back
+                movingCell.hidden = YES;
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    movingCell.hidden = NO;
+                });
+                [self removeTokenAtIndex:removedIndex];
+                if ([self.delegate respondsToSelector:@selector(tokenView:didRemoveTokenAtIndex:)]) {
+                    [self.delegate tokenView:self didRemoveTokenAtIndex:removedIndex];
+                }
             }
         }
         [readyToDeleteView removeFromSuperview];
