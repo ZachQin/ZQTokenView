@@ -34,12 +34,11 @@
 }
 
 - (void)setup {
-    // ------setup UICollectionView
+    // ------ setup UICollectionView
     UICollectionViewLeftAlignedLayout *collectionViewLeftAlignedLayout = [[UICollectionViewLeftAlignedLayout alloc] init];
     self.collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:collectionViewLeftAlignedLayout];
     [self addSubview:self.collectionView];
     self.collectionView.backgroundColor = [UIColor clearColor];
-    self.collectionView.clipsToBounds = NO;
     self.collectionView.backgroundView = [[UIView alloc] initWithFrame:CGRectZero];
     self.collectionView.translatesAutoresizingMaskIntoConstraints = NO;
     [self addConstraint:[NSLayoutConstraint constraintWithItem:self attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.collectionView attribute:NSLayoutAttributeTop multiplier:1 constant:0]];
@@ -51,14 +50,14 @@
     
     [self.collectionView registerClass:[ZQCollectionViewCell class] forCellWithReuseIdentifier:@"TokenCell"];
     
-    // ------setup recognizer
+    // ------ setup recognizer
     UILongPressGestureRecognizer *longPressGestureRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongGesture:)];
     longPressGestureRecognizer.minimumPressDuration = 0.2;
     [self.collectionView addGestureRecognizer:longPressGestureRecognizer];
     UITapGestureRecognizer *tapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTapGesture:)];
     [self.collectionView.backgroundView addGestureRecognizer:tapGestureRecognizer];
     
-    // ------setup TextField
+    // ------ setup TextField
     self.textField = [[UITextField alloc] initWithFrame:CGRectZero];
     self.textField.text = @"\u200B";
     self.textField.backgroundColor = [UIColor clearColor];
@@ -66,7 +65,7 @@
     self.textField.delegate = self;
     [self.collectionView addSubview:self.textField];
     
-    // ------setup TokenTextHolderLabel
+    // ------ setup TokenTextHolderLabel
     self.tokenPlaceHolderLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, 40)];
     self.tokenPlaceHolderLabel.text = @"Tap here to create.";
     self.tokenPlaceHolderLabel.numberOfLines = 0;

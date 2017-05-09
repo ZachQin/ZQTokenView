@@ -18,7 +18,7 @@
  *
  *  @return The token background color.
  */
-- ( UIColor * _Nonnull )tokenView:(ZQTokenView * _Nonnull)tokenView colorForTitle:(NSString * _Nonnull)title;
+- (UIColor * _Nonnull )tokenView:(ZQTokenView * _Nonnull)tokenView colorForTitle:(NSString * _Nonnull)title;
 /**
  *  Asks your delegate whether insert the specific token title when type 'RETURN'. You can filter the unnecessary data here.
  *
