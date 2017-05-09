@@ -87,7 +87,6 @@
  *  @param destinationIndex The index of the destination token.
  */
 - (void)tokenView:(ZQTokenView * _Nonnull)tokenView didMoveItemAtIndex:(NSInteger)sourceIndex toIndex:(NSInteger)destinationIndex;
-
 @end
 
 @interface ZQTokenView : UIView <UICollectionViewDelegate, UICollectionViewDataSource, UITextFieldDelegate>

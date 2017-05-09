@@ -17,15 +17,12 @@
     }
     return self;
 }
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
+
 - (void)drawRect:(CGRect)rect {
-    // Drawing code
-    //// Color Declarations
-    UIColor* fillColor = [UIColor colorWithRed:0.5 green: 0.4 blue: 0.5 alpha: 1];
-    
-    //// Bezier Drawing
-    UIBezierPath* bezierPath = [UIBezierPath bezierPathWithOvalInRect:rect];
+    // Color Declarations
+    UIColor *fillColor = [UIColor colorWithRed:0.5 green: 0.4 blue: 0.5 alpha: 1];
+    // Bezier Drawing
+    UIBezierPath *bezierPath = [UIBezierPath bezierPathWithOvalInRect:rect];
     
     [fillColor setFill];
     [bezierPath fill];

@@ -239,7 +239,7 @@
     });
 }
 
-#pragma mark - **************** layout
+#pragma mark - **************** Layout
 - (void)updatePositionAndHidden {
     // ------Update TextFieldPosition
     NSIndexPath *path = [NSIndexPath indexPathForRow:[self.collectionView numberOfItemsInSection:0] - 1 inSection:0];
