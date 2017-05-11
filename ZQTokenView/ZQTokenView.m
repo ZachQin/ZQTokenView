@@ -22,6 +22,7 @@
 
 @implementation ZQTokenView {
     ZQCollectionViewCell *movingCell;
+    UIView *movingCellSnapshootView;
     ZQReadyToDeleteView *readyToDeleteView;
 }
 
@@ -171,17 +172,27 @@
         }
         [self.collectionView beginInteractiveMovementForItemAtIndexPath:movingIndexPath];
         movingCell = (ZQCollectionViewCell *)[self.collectionView cellForItemAtIndexPath:movingIndexPath];
-        readyToDeleteView = [[ZQReadyToDeleteView alloc] initWithFrame:CGRectMake(-20, movingCell.bounds.size.height / 2 - 20, 40, 40)];
-        [movingCell addSubview:readyToDeleteView];
+        // ------ Because the clipsToBounds property of UICollectionView need to be set to YES, to move the cell out of collectionView, we need to create a snapshoot of movingCell and add it to ZQTokenView.
+        movingCellSnapshootView = [self snapshootViewWithView:movingCell];
+        movingCellSnapshootView.frame = [self.collectionView convertRect:movingCell.frame toView:self];
+        [self addSubview:movingCellSnapshootView];
+        
+        readyToDeleteView = [[ZQReadyToDeleteView alloc] initWithFrame:CGRectMake(-20, movingCellSnapshootView.bounds.size.height / 2 - 20, 40, 40)];
+        [movingCellSnapshootView addSubview:readyToDeleteView];
         readyToDeleteView.hidden = YES;
         gesturePosition.y += verticalOffset;
         [UIView animateWithDuration:0.3 animations:^{
             [self.collectionView updateInteractiveMovementTargetPosition:gesturePosition];
+            movingCellSnapshootView.frame = [self.collectionView convertRect:movingCell.frame toView:self];
         }];
     } else if (longPressGestureRecognizer.state == UIGestureRecognizerStateChanged) {
         gesturePosition.y += verticalOffset;
         [self.collectionView updateInteractiveMovementTargetPosition:gesturePosition];
         gesturePosition.y -= verticalOffset;
+        
+        movingCellSnapshootView.frame = [self.collectionView convertRect:movingCell.frame toView:self];
+        [self addSubview:movingCellSnapshootView];
+        
         if (!CGRectContainsPoint(self.collectionView.bounds, gesturePosition)) {
             readyToDeleteView.hidden = NO;
         } else {
@@ -196,7 +207,8 @@
         }
         if (shoudRemove) {
             if (!CGRectContainsPoint(self.collectionView.bounds, gesturePosition)) {
-                [self explodeOnView:self.collectionView frame:CGRectMake(gesturePosition.x - 60, gesturePosition.y - 25, 50, 50)];
+                CGRect explodeFrame = [self.collectionView convertRect:CGRectMake(gesturePosition.x - 60, gesturePosition.y - 25, 50, 50) toView:self];
+                [self explodeOnView:self frame:explodeFrame];
                 // ------ For avoiding the cell move back
                 movingCell.hidden = YES;
                 dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -209,8 +221,14 @@
             }
         }
         [readyToDeleteView removeFromSuperview];
+        [movingCellSnapshootView removeFromSuperview];
+        readyToDeleteView = nil;
+        movingCellSnapshootView = nil;
     } else {
         [readyToDeleteView removeFromSuperview];
+        [movingCellSnapshootView removeFromSuperview];
+        readyToDeleteView = nil;
+        movingCellSnapshootView = nil;
         [self.collectionView cancelInteractiveMovement];
     }
 }
@@ -237,6 +255,19 @@
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(explodeImageView.animationDuration * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [explodeImageView removeFromSuperview];
     });
+}
+
+- (UIView *)snapshootViewWithView:(UIView *)view {
+    UIGraphicsBeginImageContextWithOptions(view.bounds.size, NO, [UIScreen mainScreen].scale);
+    CGContextRef ctx = UIGraphicsGetCurrentContext();
+    [movingCell.layer renderInContext:ctx];
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    UIView *snapshootView = [[UIView alloc] initWithFrame:view.bounds];
+    snapshootView.layer.contents = (__bridge id _Nullable)(image.CGImage);
+    snapshootView.layer.contentsScale = [UIScreen mainScreen].scale;
+    return snapshootView;
 }
 
 #pragma mark - **************** Layout
