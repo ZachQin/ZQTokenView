@@ -21,6 +21,7 @@
 @end
 
 @implementation ZQTokenView {
+    NSIndexPath *movingIndexPath;
     ZQCollectionViewCell *movingCell;
     UIView *movingCellSnapshootView;
     ZQReadyToDeleteView *readyToDeleteView;
@@ -182,7 +183,7 @@
     CGFloat verticalOffset = -20;
     if (longPressGestureRecognizer.state == UIGestureRecognizerStateBegan) {
         [self.textField resignFirstResponder];
-        NSIndexPath *movingIndexPath = [self.collectionView indexPathForItemAtPoint:gesturePosition];
+        movingIndexPath = [self.collectionView indexPathForItemAtPoint:gesturePosition];
         if (!movingIndexPath) {
             return;
         }
@@ -215,26 +216,18 @@
             readyToDeleteView.hidden = YES;
         }
     } else if (longPressGestureRecognizer.state == UIGestureRecognizerStateEnded) {
-        [self.collectionView endInteractiveMovement];
         BOOL shoudRemove = YES;
-        NSInteger removedIndex = [self.titleMutableArray indexOfObjectPassingTest:^BOOL(NSString * _Nonnull title, NSUInteger idx, BOOL * _Nonnull stop) {
-            return [movingCell.token.text isEqualToString:title];
-        }];
         if ([self.delegate respondsToSelector:@selector(tokenView:shoudRemoveTitle:atIndex:)]) {
-            shoudRemove = [self.delegate tokenView:self shoudRemoveTitle:movingCell.token.text atIndex:removedIndex];
+            shoudRemove = [self.delegate tokenView:self shoudRemoveTitle:movingCell.token.text atIndex:movingIndexPath.row];
         }
         if (shoudRemove) {
             if (!CGRectContainsPoint(self.collectionView.bounds, gesturePosition)) {
                 CGRect explodeFrame = [self.collectionView convertRect:CGRectMake(gesturePosition.x - 60, gesturePosition.y - 25, 50, 50) toView:self];
                 [self explodeOnView:self frame:explodeFrame];
                 // ------ For avoiding the cell move back
-                movingCell.hidden = YES;
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                    movingCell.hidden = NO;
-                });
-                [self removeTokenAtIndex:removedIndex];
+                [self removeTokenAtIndex:movingIndexPath.row];
                 if ([self.delegate respondsToSelector:@selector(tokenView:didRemoveTokenAtIndex:)]) {
-                    [self.delegate tokenView:self didRemoveTokenAtIndex:removedIndex];
+                    [self.delegate tokenView:self didRemoveTokenAtIndex:movingIndexPath.row];
                 }
             }
         }
@@ -242,6 +235,7 @@
         [movingCellSnapshootView removeFromSuperview];
         readyToDeleteView = nil;
         movingCellSnapshootView = nil;
+        [self.collectionView endInteractiveMovement];
     } else {
         [readyToDeleteView removeFromSuperview];
         [movingCellSnapshootView removeFromSuperview];
@@ -352,6 +346,8 @@
 
 - (NSIndexPath *)collectionView:(UICollectionView *)collectionView targetIndexPathForMoveFromItemAtIndexPath:(NSIndexPath *)originalIndexPath toProposedIndexPath:(NSIndexPath *)proposedIndexPath {
     if (originalIndexPath.row != proposedIndexPath.row) {
+        movingIndexPath = proposedIndexPath;
+        
         NSString *sourceString = self.titleMutableArray[originalIndexPath.row];
         [self.titleMutableArray removeObjectAtIndex:originalIndexPath.row];
         [self.titleMutableArray insertObject:sourceString atIndex:proposedIndexPath.row];
