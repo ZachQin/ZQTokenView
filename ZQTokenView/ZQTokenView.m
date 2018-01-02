@@ -225,7 +225,10 @@
                 CGRect explodeFrame = [self.collectionView convertRect:CGRectMake(gesturePosition.x - 60, gesturePosition.y - 25, 50, 50) toView:self];
                 [self explodeOnView:self frame:explodeFrame];
                 // ------ For avoiding the cell move back
-                [self removeTokenAtIndex:movingIndexPath.row];
+                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                    [self removeTokenAtIndex:movingIndexPath.row];
+                });
+            
                 if ([self.delegate respondsToSelector:@selector(tokenView:didRemoveTokenAtIndex:)]) {
                     [self.delegate tokenView:self didRemoveTokenAtIndex:movingIndexPath.row];
                 }

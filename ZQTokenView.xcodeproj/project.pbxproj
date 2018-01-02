@@ -24,7 +24,18 @@
 		873285651D70836A000CBDEA /* ZQReadyToDeleteView.m in Sources */ = {isa = PBXBuildFile; fileRef = 873285581D70836A000CBDEA /* ZQReadyToDeleteView.m */; };
 		873285661D70836A000CBDEA /* ZQTokenView.m in Sources */ = {isa = PBXBuildFile; fileRef = 8732855A1D70836A000CBDEA /* ZQTokenView.m */; };
 		873285681D7083AA000CBDEA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 873285671D7083AA000CBDEA /* Main.storyboard */; };
+		8784F4DA1FFB5168002C81CF /* ZQTokenViewUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 8784F4D91FFB5168002C81CF /* ZQTokenViewUITests.m */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		8784F4DC1FFB5168002C81CF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 873285261D708314000CBDEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 8732852D1D708314000CBDEA;
+			remoteInfo = ZQTokenView;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		8732852E1D708314000CBDEA /* ZQTokenView.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ZQTokenView.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -52,10 +63,20 @@
 		873285591D70836A000CBDEA /* ZQTokenView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZQTokenView.h; sourceTree = "<group>"; };
 		8732855A1D70836A000CBDEA /* ZQTokenView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZQTokenView.m; sourceTree = "<group>"; };
 		873285671D7083AA000CBDEA /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
+		8784F4D71FFB5168002C81CF /* ZQTokenViewUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ZQTokenViewUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		8784F4D91FFB5168002C81CF /* ZQTokenViewUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZQTokenViewUITests.m; sourceTree = "<group>"; };
+		8784F4DB1FFB5168002C81CF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		8732852B1D708314000CBDEA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8784F4D41FFB5168002C81CF /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -70,6 +91,7 @@
 			children = (
 				873285481D70836A000CBDEA /* ZQTokenView */,
 				873285301D708314000CBDEA /* ZQTokenViewExample */,
+				8784F4D81FFB5168002C81CF /* ZQTokenViewUITests */,
 				8732852F1D708314000CBDEA /* Products */,
 			);
 			sourceTree = "<group>";
@@ -78,6 +100,7 @@
 			isa = PBXGroup;
 			children = (
 				8732852E1D708314000CBDEA /* ZQTokenView.app */,
+				8784F4D71FFB5168002C81CF /* ZQTokenViewUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -136,6 +159,15 @@
 			path = Explode;
 			sourceTree = "<group>";
 		};
+		8784F4D81FFB5168002C81CF /* ZQTokenViewUITests */ = {
+			isa = PBXGroup;
+			children = (
+				8784F4D91FFB5168002C81CF /* ZQTokenViewUITests.m */,
+				8784F4DB1FFB5168002C81CF /* Info.plist */,
+			);
+			path = ZQTokenViewUITests;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -156,6 +188,24 @@
 			productReference = 8732852E1D708314000CBDEA /* ZQTokenView.app */;
 			productType = "com.apple.product-type.application";
 		};
+		8784F4D61FFB5168002C81CF /* ZQTokenViewUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8784F4E01FFB5168002C81CF /* Build configuration list for PBXNativeTarget "ZQTokenViewUITests" */;
+			buildPhases = (
+				8784F4D31FFB5168002C81CF /* Sources */,
+				8784F4D41FFB5168002C81CF /* Frameworks */,
+				8784F4D51FFB5168002C81CF /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				8784F4DD1FFB5168002C81CF /* PBXTargetDependency */,
+			);
+			name = ZQTokenViewUITests;
+			productName = ZQTokenViewUITests;
+			productReference = 8784F4D71FFB5168002C81CF /* ZQTokenViewUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -167,6 +217,11 @@
 				TargetAttributes = {
 					8732852D1D708314000CBDEA = {
 						CreatedOnToolsVersion = 7.3.1;
+					};
+					8784F4D61FFB5168002C81CF = {
+						CreatedOnToolsVersion = 9.2;
+						ProvisioningStyle = Automatic;
+						TestTargetID = 8732852D1D708314000CBDEA;
 					};
 				};
 			};
@@ -184,6 +239,7 @@
 			projectRoot = "";
 			targets = (
 				8732852D1D708314000CBDEA /* ZQTokenView */,
+				8784F4D61FFB5168002C81CF /* ZQTokenViewUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -206,6 +262,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		8784F4D51FFB5168002C81CF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -223,7 +286,23 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		8784F4D31FFB5168002C81CF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8784F4DA1FFB5168002C81CF /* ZQTokenViewUITests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		8784F4DD1FFB5168002C81CF /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 8732852D1D708314000CBDEA /* ZQTokenView */;
+			targetProxy = 8784F4DC1FFB5168002C81CF /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		8732853F1D708314000CBDEA /* LaunchScreen.storyboard */ = {
@@ -349,6 +428,58 @@
 			};
 			name = Release;
 		};
+		8784F4DE1FFB5168002C81CF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = ZQTokenViewUITests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = BUAA.ZQTokenViewUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = ZQTokenView;
+			};
+			name = Debug;
+		};
+		8784F4DF1FFB5168002C81CF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				INFOPLIST_FILE = ZQTokenViewUITests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = BUAA.ZQTokenViewUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = ZQTokenView;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -366,6 +497,15 @@
 			buildConfigurations = (
 				873285461D708314000CBDEA /* Debug */,
 				873285471D708314000CBDEA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		8784F4E01FFB5168002C81CF /* Build configuration list for PBXNativeTarget "ZQTokenViewUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8784F4DE1FFB5168002C81CF /* Debug */,
+				8784F4DF1FFB5168002C81CF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
