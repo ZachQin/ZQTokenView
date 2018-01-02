@@ -11,6 +11,8 @@
 
 @interface ViewController () <ZQTokenViewDelegate>
 @property (weak, nonatomic) IBOutlet ZQTokenView *tokenView;
+@property (nonatomic, strong) NSArray<NSString *> *titleArray;
+@property (nonatomic, strong) NSDictionary<NSString *, UIColor *> *colorMap;
 @end
 
 @implementation ViewController
@@ -18,25 +20,25 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
-    self.tokenView.delegate = self;
-    self.tokenView.titleArray = [NSMutableArray arrayWithObjects:
-                                 @"Samuel Prescott",
-                                 @"Grace Mcburney",
-                                 @"Rosemary Sells",
-                                 @"Janet Canady",
-                                 @"Gregory Leech",
-                                 @"Geneva Mcguinness",
-                                 @"Billy Shin",
-                                 @"Douglass Fostlick",
-                                 @"Roberta Pedersen",
-                                 @"Earl Rashid",
-                                 @"Matthew Hooks", nil];
+    self.titleArray = @[@"Samuel Prescott",
+                        @"Grace Mcburney",
+                        @"Rosemary Sells",
+                        @"Janet Canady",
+                        @"Gregory Leech",
+                        @"Geneva Mcguinness",
+                        @"Billy Shin",
+                        @"Douglass Fostlick",
+                        @"Roberta Pedersen",
+                        @"Earl Rashid",
+                        @"Matthew Hooks"];
     NSMutableDictionary *colorMap = [NSMutableDictionary dictionary];
-    [self.tokenView.titleArray enumerateObjectsUsingBlock:^(NSString *title, NSUInteger idx, BOOL * _Nonnull stop) {
+    [self.titleArray enumerateObjectsUsingBlock:^(NSString *title, NSUInteger idx, BOOL * _Nonnull stop) {
          colorMap[title] = [self randomColor];
     }];
+    self.colorMap = colorMap;
+    self.tokenView.delegate = self;
     self.tokenView.containClearButton = YES;
-    self.tokenView.colorMap = colorMap;
+    [self resetTokenView];
 }
 
 
@@ -46,6 +48,13 @@
     CGFloat green = arc4random() % 255 / 255.0;
     CGFloat blue = arc4random() % 255 / 255.0;
     return [UIColor colorWithRed:red green:green blue:blue alpha:1.0];
+}
+
+#pragma mark - **************** action
+- (IBAction)resetTokenView {
+    self.tokenView.titleArray = self.titleArray;
+    self.tokenView.colorMap = self.colorMap;
+    [self.tokenView reload];
 }
 
 #pragma mark - **************** delegate

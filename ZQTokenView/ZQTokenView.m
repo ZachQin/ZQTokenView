@@ -16,7 +16,7 @@
 @property (strong, nonatomic) UIButton *clearButton;
 @property (strong, nonatomic) UICollectionView *collectionView;
 @property (strong, nonatomic) UITextField *textField;
-@property (strong, nonatomic) NSMutableArray *titleMutableArray;
+@property (strong, nonatomic) NSMutableArray<NSString *> *titleMutableArray;
 @property (strong, nonatomic) NSMutableDictionary<NSString *, UIColor *> *colorMutableMap;
 @end
 
@@ -143,7 +143,7 @@
 }
 
 - (NSDictionary<NSString *,UIColor *> *)colorMap {
-    return [_colorMutableMap mutableCopy];
+    return [_colorMutableMap copy];
 }
 
 - (void)setTokenSelectedColor:(UIColor *)tokenSelectedColor {
@@ -217,7 +217,9 @@
     } else if (longPressGestureRecognizer.state == UIGestureRecognizerStateEnded) {
         [self.collectionView endInteractiveMovement];
         BOOL shoudRemove = YES;
-        NSInteger removedIndex = [self.collectionView indexPathForCell:movingCell].row;
+        NSInteger removedIndex = [self.titleMutableArray indexOfObjectPassingTest:^BOOL(NSString * _Nonnull title, NSUInteger idx, BOOL * _Nonnull stop) {
+            return [movingCell.token.text isEqualToString:title];
+        }];
         if ([self.delegate respondsToSelector:@selector(tokenView:shoudRemoveTitle:atIndex:)]) {
             shoudRemove = [self.delegate tokenView:self shoudRemoveTitle:movingCell.token.text atIndex:removedIndex];
         }
