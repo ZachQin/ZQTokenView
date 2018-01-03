@@ -220,18 +220,19 @@
         if ([self.delegate respondsToSelector:@selector(tokenView:shoudRemoveTitle:atIndex:)]) {
             shoudRemove = [self.delegate tokenView:self shoudRemoveTitle:movingCell.token.text atIndex:movingIndexPath.row];
         }
-        if (shoudRemove) {
-            if (!CGRectContainsPoint(self.collectionView.bounds, gesturePosition)) {
-                CGRect explodeFrame = [self.collectionView convertRect:CGRectMake(gesturePosition.x - 60, gesturePosition.y - 25, 50, 50) toView:self];
-                [self explodeOnView:self frame:explodeFrame];
-                // ------ For avoiding the cell move back
-                dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                    [self removeTokenAtIndex:movingIndexPath.row];
-                });
+        if (shoudRemove && !CGRectContainsPoint(self.collectionView.bounds, gesturePosition)) {
+            CGRect explodeFrame = [self.collectionView convertRect:CGRectMake(gesturePosition.x - 60, gesturePosition.y - 25, 50, 50) toView:self];
+            [self explodeOnView:self frame:explodeFrame];
+            // ------ For avoiding the cell move back
             
-                if ([self.delegate respondsToSelector:@selector(tokenView:didRemoveTokenAtIndex:)]) {
-                    [self.delegate tokenView:self didRemoveTokenAtIndex:movingIndexPath.row];
-                }
+            movingCell.hidden = YES;
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.4 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                [self removeTokenAtIndex:movingIndexPath.row];
+                movingCell.hidden = NO;
+            });
+        
+            if ([self.delegate respondsToSelector:@selector(tokenView:didRemoveTokenAtIndex:)]) {
+                [self.delegate tokenView:self didRemoveTokenAtIndex:movingIndexPath.row];
             }
         }
         [readyToDeleteView removeFromSuperview];
@@ -348,17 +349,14 @@
 }
 
 - (NSIndexPath *)collectionView:(UICollectionView *)collectionView targetIndexPathForMoveFromItemAtIndexPath:(NSIndexPath *)originalIndexPath toProposedIndexPath:(NSIndexPath *)proposedIndexPath {
-    if (originalIndexPath.row != proposedIndexPath.row) {
-        movingIndexPath = proposedIndexPath;
-        
-        NSString *sourceString = self.titleMutableArray[originalIndexPath.row];
-        [self.titleMutableArray removeObjectAtIndex:originalIndexPath.row];
-        [self.titleMutableArray insertObject:sourceString atIndex:proposedIndexPath.row];
-    }
+    movingIndexPath = proposedIndexPath;
     return proposedIndexPath;
 }
 
 - (void)collectionView:(UICollectionView *)collectionView moveItemAtIndexPath:(NSIndexPath *)sourceIndexPath toIndexPath:(NSIndexPath *)destinationIndexPath {
+    NSString *sourceString = self.titleMutableArray[sourceIndexPath.row];
+    [self.titleMutableArray removeObjectAtIndex:sourceIndexPath.row];
+    [self.titleMutableArray insertObject:sourceString atIndex:destinationIndexPath.row];
     [self updatePositionAndHidden];
     if ([self.delegate respondsToSelector:@selector(tokenView:didMoveItemAtIndex:toIndex:)]) {
         [self.delegate tokenView:self didMoveItemAtIndex:sourceIndexPath.row toIndex:destinationIndexPath.row];
