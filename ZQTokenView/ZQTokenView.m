@@ -254,12 +254,13 @@
 }
 
 #pragma mark - **************** Other
-- (void)explodeOnView:(UIView *)containerView frame:(CGRect)frame{
+- (void)explodeOnView:(UIView *)containerView frame:(CGRect)frame {
+    NSBundle *bundle = [NSBundle bundleForClass:[self class]];
     UIImageView *explodeImageView = [[UIImageView alloc] initWithFrame:frame];
     NSMutableArray *imageArray = [NSMutableArray array];
     
     for (int i = 0; i < 7; i++) {
-        UIImage *image = [UIImage imageNamed:[NSString stringWithFormat:@"explode_%d", i]];
+        UIImage *image = [UIImage imageNamed:[NSString stringWithFormat:@"explode_%d", i] inBundle:bundle compatibleWithTraitCollection:nil];
         [imageArray addObject:image];
     }
     
